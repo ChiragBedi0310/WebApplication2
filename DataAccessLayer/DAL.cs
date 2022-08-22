@@ -13,10 +13,11 @@ namespace DataAccessLayer
     {
         SqlConnection conn;
         SqlCommand cmd = new SqlCommand();
+        string connect = "Server = DEL1-LHP-N82143\\MSSQLSERVER01;Database = Week5;Integrated Security = SSPI";
 
         public void Insert(string id, string name, string city, string email)
         {
-            conn = new SqlConnection("Server = DEL1-LHP-N82143\\MSSQLSERVER01;Database = Week5;Integrated Security = SSPI");
+            conn = new SqlConnection(connect);
             cmd = new SqlCommand("InsertIntoStudent",conn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@ID", id);
@@ -30,7 +31,7 @@ namespace DataAccessLayer
 
         public void Delete(string id)
         {
-            conn = new SqlConnection("Server = DEL1-LHP-N82143\\MSSQLSERVER01;Database = Week5;Integrated Security = SSPI");
+            conn = new SqlConnection(connect);
             cmd = new SqlCommand("DeleteStudent", conn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@ID", id);
@@ -39,18 +40,65 @@ namespace DataAccessLayer
             conn.Close();
         }
 
-        public void Update(string id, string name, string city, string email)
+        public bool Update(string id, string name, string city, string email)
         {
-            conn = new SqlConnection("Server = DEL1-LHP-N82143\\MSSQLSERVER01;Database = Week5;Integrated Security = SSPI");
-            cmd = new SqlCommand("UpdateStudent", conn);
+            if (GetNumberOfRecords() > 0)
+            {
+                conn = new SqlConnection(connect);
+                cmd = new SqlCommand("UpdateStudent", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@Name", name);
+                cmd.Parameters.AddWithValue("@City", city);
+                cmd.Parameters.AddWithValue("@Email", email);
+                conn.Open();
+                int n = cmd.ExecuteNonQuery();
+                conn.Close();
+                if (n > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public object Show()
+        {
+            conn = new SqlConnection(connect);
+            cmd = new SqlCommand("StudentDetails", conn);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@ID", id);
-            cmd.Parameters.AddWithValue("@Name", name);
-            cmd.Parameters.AddWithValue("@City", city);
-            cmd.Parameters.AddWithValue("@Email", email);
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
+            DataTable DT = new DataTable();
+            SqlDataAdapter DA = new SqlDataAdapter(cmd);
+            DA.Fill(DT);
+            return DT;
+        }
+
+        private int GetNumberOfRecords()
+        {
+            int count = -1;
+            try
+            {
+                conn = new SqlConnection(connect);
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("Select count(*) from Student", conn);
+
+                count = (int)cmd.ExecuteScalar();
+            }
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
+            return count;
         }
     }
 }

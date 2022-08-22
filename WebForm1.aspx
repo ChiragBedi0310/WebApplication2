@@ -20,7 +20,11 @@
             margin-left: 61px;
         }
         .auto-style5 {
-            margin-left: 117px;
+            margin-left: 110px;
+            margin-right: 0px;
+        }
+        .auto-style6 {
+            margin-left: 142px;
         }
     </style>
 </head>
@@ -56,20 +60,15 @@
             </table>
             <br />
             <asp:Button ID="Button1" runat="server" Text="Save" OnClick="Button1_Click" Width="65px" />
-            <asp:Button ID="Button2" runat="server" CssClass="auto-style4" OnClick="Button2_Click" Text="Update" />
-            <asp:Button ID="Button3" runat="server" CssClass="auto-style5" OnClick="Button3_Click" Text="Delete" />
+            <asp:Button ID="Button2" runat="server" CssClass="auto-style4" OnClick="Button2_Click" Text="Update" Width="99px" />
+            <asp:Button ID="Button3" runat="server" CssClass="auto-style5" OnClick="Button3_Click" Text="Delete" Width="85px" />
+            <asp:Button ID="Button4" runat="server" CssClass="auto-style6" OnClick="Button4_Click" Text="Display" />
             <br />
+            <br />
+            <asp:GridView ID="GridView1" runat="server">
+            </asp:GridView>
             <br />
         </div>
-        <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataSourceID="SqlDataSource1">
-            <Columns>
-                <asp:BoundField DataField="id" HeaderText="id" SortExpression="id" />
-                <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
-                <asp:BoundField DataField="city" HeaderText="city" SortExpression="city" />
-                <asp:BoundField DataField="email" HeaderText="email" SortExpression="email" />
-            </Columns>
-        </asp:GridView>
-        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:Week5ConnectionString %>" SelectCommand="StudentDetails" SelectCommandType="StoredProcedure"></asp:SqlDataSource>
     </form>
 </body>
 </html>

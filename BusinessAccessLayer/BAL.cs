@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 using DataAccessLayer;
 
 namespace BusinessAccessLayer
@@ -21,9 +22,22 @@ namespace BusinessAccessLayer
             obj.Delete(id);
         }
 
-        public void UpdateData(string id, string name, string city, string email)
+        public bool UpdateData(string id, string name, string city, string email)
         {
-            obj.Update(id, name, city, email);
+            if(obj.Update(id, name, city, email))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public object ShowData()
+        {
+            return obj.Show();
+            
         }
     }
 }
